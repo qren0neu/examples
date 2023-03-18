@@ -41,6 +41,7 @@
     <string name="button_check_permission">Check Permission</string>
     <string name="button_go_to_camera">Go to Camera</string>
     <string name="button_go_to_gallery">Go to Gallery</string>
+    <string name="button_logout">Logout</string>
 
     <string-array name="delegate_spinner_titles">
         <item>CPU</item>
