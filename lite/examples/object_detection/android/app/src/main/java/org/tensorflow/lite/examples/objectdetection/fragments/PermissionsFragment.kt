@@ -54,7 +54,9 @@ class PermissionsFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                navigateToCamera()
+//                navigateToCamera()
+                navigateToMain()
+                Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT).show()
             }
             else -> {
                 requestPermissionLauncher.launch(
@@ -68,6 +70,11 @@ class PermissionsFragment : Fragment() {
             Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
                 PermissionsFragmentDirections.actionPermissionsToCamera())
         }
+    }
+
+    private fun navigateToMain() {
+        Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+                PermissionsFragmentDirections.actionPermissionsToMain())
     }
 
     companion object {

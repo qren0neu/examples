@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import org.tensorflow.lite.examples.objectdetection.R
 import org.tensorflow.lite.examples.objectdetection.activities.LoginActivity
 import org.tensorflow.lite.examples.objectdetection.databinding.MainFragLayoutBinding
 import org.tensorflow.lite.examples.objectdetection.services.UserService
 
+
 class MainFragment : Fragment() {
     private var mainFragBinding: MainFragLayoutBinding? = null
-    private val CODE_PICK_RESULT = 100015;
+    private val CODE_PICK_RESULT = 123;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainFragBinding = MainFragLayoutBinding.inflate(inflater, container, false)
@@ -57,20 +58,28 @@ class MainFragment : Fragment() {
                 requireActivity().startActivity(intent)
                 return@setOnClickListener
             }
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            requireActivity().startActivityForResult(intent, CODE_PICK_RESULT)
+//            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//            requireActivity().startActivityForResult(intent, CODE_PICK_RESULT)
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), CODE_PICK_RESULT)
         }
         mainFragBinding?.btnLogout?.setOnClickListener {
             UserService.logout()
+            onResume()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CODE_PICK_RESULT && resultCode == FragmentActivity.RESULT_OK) {
+        if (requestCode == CODE_PICK_RESULT) {
             // picked up
             val imageUri = data?.data
-
+//            val action = MainFragmentDirections.actionMainToImage()
+            val bundle = Bundle()
+            bundle.putString("imageUri", imageUri.toString())
+            findNavController().navigate(R.id.action_main_to_image, bundle)
         }
     }
 
